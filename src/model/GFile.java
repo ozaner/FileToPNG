@@ -2,11 +2,13 @@ package model;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -40,6 +42,11 @@ public class GFile {
 	 */
 	private String fileName;
 	
+	public GFile(byte[] data, String name) {
+		fileName = name; //get File name
+		fillMatrix(data); //Initializes pixelMatrix
+	}
+	
 	/**
 	 * Constructs a GFile based on a given file.
 	 * @param file - A file to convert into a GFile
@@ -56,6 +63,18 @@ public class GFile {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		fillMatrix(data); //Initializes pixelMatrix
+	}
+	
+	/**
+	 * Constructs a GFile based on a pre-existing GFile PNG file
+	 * @param file - An image to convert into a GFile
+	 */
+	public GFile(BufferedImage png, String name) {
+		
+	}
+	
+	public void fillMatrix(byte[] data) {
 		List<Integer> pixelList = new ArrayList<Integer>(); //Create new list to hold pixels.
 		
 		//Convert bytes to unsigned int
@@ -79,22 +98,14 @@ public class GFile {
 	}
 	
 	/**
-	 * Constructs a GFile based on a pre-existing GFile PNG file
-	 * @param file - An image to convert into a GFile
-	 */
-	public GFile(BufferedImage png, String name) {
-		
-	}
-	
-	/**
 	 * @return the converted PNG representation of this GFile
 	 */
 	public BufferedImage getPNG() {
 		BufferedImage png = new BufferedImage(pixelMatrix.length, 
 				pixelMatrix[0].length, BufferedImage.TYPE_INT_ARGB);
-		for(int r = 0; r < pixelMatrix.length; r++)
-			for(int c = 0; c < pixelMatrix[0].length; c++)
-				png.setRGB(r, c, pixelMatrix[r][c]);
+		for(int r = 0; r < pixelMatrix[0].length; r++)
+			for(int c = 0; c < pixelMatrix.length; c++)
+				png.setRGB(c, r, pixelMatrix[r][c]);
 		return png;
 	}
 	
@@ -102,7 +113,24 @@ public class GFile {
 	 * @return the original file representation of this GFile.
 	 */
 	public File getFile() {
-		return null;
+		//2D pixelMatrix to 1d byte array
+		byte[] byteArray = new byte[pixelMatrix.length * pixelMatrix[0].length];
+	    int k = 0;
+	    for (int i = 0; i < pixelMatrix.length; i++) {
+	        for (int j = 0; j < pixelMatrix.length; j++) {
+	            byteArray[k++] = (byte)pixelMatrix[i][j];
+	        }
+	    }
+	    //Create and write bytes to file
+	    File file = new File(fileName);
+		FileOutputStream fostrm;
+		try {
+			fostrm = new FileOutputStream(file);
+			fostrm.write(byteArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return file;
 	}
 	
 	/**
@@ -148,16 +176,5 @@ public class GFile {
 				else
 					matrix[r][c] = FILLER_PIXEL;
 		return matrix;
-	}
-	
-	public static void main(String[] args) throws IOException {
-		GFile g = new GFile(new File("random.txt"));
-		JFrame j = new JFrame("TEST");
-		j.setSize(500, 500);
-		j.add(new JLabel(new ImageIcon(g.getPNG())));
-		j.setVisible(true);
-		
-		File outputfile = new File("image.png");
-		ImageIO.write(g.getPNG(), "png", outputfile);
 	}
 }
