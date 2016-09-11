@@ -8,12 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 public class GFile {
 	
@@ -37,6 +31,8 @@ public class GFile {
 	 */
 	private int[][] pixelMatrix;
 	
+	private byte[] data;
+	
 	/**
 	 * Name of the File.
 	 */
@@ -57,7 +53,6 @@ public class GFile {
 		
 		//Get File data
 		Path path = file.toPath();
-		byte[] data = null;
 		try {
 			data = Files.readAllBytes(path);
 		} catch (IOException e) {
@@ -112,25 +107,16 @@ public class GFile {
 	/**
 	 * @return the original file representation of this GFile.
 	 */
-	public File getFile() {
-		//2D pixelMatrix to 1d byte array
-		byte[] byteArray = new byte[pixelMatrix.length * pixelMatrix[0].length];
-	    int k = 0;
-	    for (int i = 0; i < pixelMatrix.length; i++) {
-	        for (int j = 0; j < pixelMatrix.length; j++) {
-	            byteArray[k++] = (byte)pixelMatrix[i][j];
-	        }
-	    }
+	public void makeFile(String name) {
 	    //Create and write bytes to file
-	    File file = new File(fileName);
+	    File file = new File(name);
 		FileOutputStream fostrm;
 		try {
 			fostrm = new FileOutputStream(file);
-			fostrm.write(byteArray);
+			fostrm.write(data);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return file;
 	}
 	
 	/**

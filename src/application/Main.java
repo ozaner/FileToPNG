@@ -2,13 +2,8 @@ package application;
 
 import java.awt.Panel;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -54,15 +49,7 @@ public class Main {
 	public static GFile getRandomGFile(int bytes) {
 		byte[] r = new byte[bytes];
 		new Random().nextBytes(r);
-		File file = new File("RandomData.txt");
-		FileOutputStream fostrm;
-		try {
-			fostrm = new FileOutputStream(file);
-			fostrm.write(r);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return new GFile(file);
+		return new GFile(r,"random");
 	}
 	
 	/**
@@ -71,15 +58,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		setUpWindow();
-		GFile g = new GFile(new File("RandomData.txt"));
-		File outputPNG = new File("file.png");
-		FileWriter writer;
-		try {
-			ImageIO.write(g.getPNG(), "png", outputPNG);
-			writer = new FileWriter(g.getFile());
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		File input =  new File("input.png");
+		GFile gfile = new GFile(input);
+		PNGPreview.setIcon(new ImageIcon(gfile.getPNG()));
+		gfile.makeFile("output.png");
 	}
 }
