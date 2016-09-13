@@ -36,7 +36,7 @@ public class GFile {
 	/**
 	 * Name of the File.
 	 */
-	private String fileName;
+	public String fileName;
 	
 	public GFile(byte[] data, String name) {
 		fileName = name; //get File name
@@ -66,7 +66,12 @@ public class GFile {
 	 * @param file - An image to convert into a GFile
 	 */
 	public GFile(BufferedImage png, String name) {
-		
+		pixelMatrix = new int[png.getWidth()][png.getHeight()];
+		for(int i = 0; i < png.getWidth(); i++) {
+			for(int j = 0; j < png.getHeight(); j++) {
+				pixelMatrix[j][i] = png.getRGB(i, j);
+			}
+		}
 	}
 	
 	public void fillMatrix(byte[] data) {

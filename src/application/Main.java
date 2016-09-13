@@ -1,9 +1,12 @@
 package application;
 
 import java.awt.Panel;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -58,9 +61,26 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		setUpWindow();
+		BufferedImage ginput = null;
 		File input =  new File("input.png");
-		GFile gfile = new GFile(input);
+		try {
+			ginput = ImageIO.read(input);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		GFile gfile = new GFile(ginput, "output2");
 		PNGPreview.setIcon(new ImageIcon(gfile.getPNG()));
-		gfile.makeFile("output.png");
+		
+//		File input =  new File("input.png");
+//		GFile gfile = new GFile(input);
+//		PNGPreview.setIcon(new ImageIcon(gfile.getPNG()));
+//		gfile.makeFile("output.png");
+//		File outputPNG = new File("file.png");
+//		try {
+//			ImageIO.write(gfile.getPNG(), "png", outputPNG);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 }
