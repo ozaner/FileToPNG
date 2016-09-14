@@ -62,17 +62,23 @@ public class Main {
 	public static void main(String[] args) {
 		setUpWindow();
 		BufferedImage ginput = null;
-		File input =  new File("input.png");
+		File input =  new File("input2.png");
 		try {
 			ginput = ImageIO.read(input);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		GFile gfile = new GFile(ginput, "output2");
+		GFile gfile = new GFile(ginput, "output");
 		PNGPreview.setIcon(new ImageIcon(gfile.getPNG()));
+		gfile.makeFile("output.png");
+		File outputPNG = new File("file.png");
+		try {
+			ImageIO.write(gfile.getPNG(), "png", outputPNG);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-//		File input =  new File("input.png");
+//		File input =  new File("input1.png");
 //		GFile gfile = new GFile(input);
 //		PNGPreview.setIcon(new ImageIcon(gfile.getPNG()));
 //		gfile.makeFile("output.png");
