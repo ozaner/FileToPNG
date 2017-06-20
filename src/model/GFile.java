@@ -30,27 +30,31 @@ public class GFile {
 	 * Alpha value used to denote 3 bytes stored in pixel.
 	 */
 	public static final int THREE_BYTE_PIXEL = 255;
+		
 	
 	private BufferedImage png;
 	
 	public byte[] data;
+	
+	private String password;
 	
 	/**
 	 * Name of the File.
 	 */
 	private String fileName;
 	
-	public GFile(byte[] data, String name) {
+	public GFile(byte[] data, String name, String password) {
 		fileName = name; //Initializes File name
 		this.data = data; //Initializes data
 		png = bytesToPNG(data); //Initializes png
+		this.password = password;
 	}
 	
 	/**
 	 * Constructs a GFile based on a given file.
 	 * @param file - A file to convert into a GFile
 	 */
-	public GFile(File file) {
+	public GFile(File file, String password) {
 		fileName = file.getName(); //Initializes File name
 //		byte[] nameBytes = fileName.getBytes(); //get name data
 		
@@ -62,6 +66,7 @@ public class GFile {
 			e.printStackTrace();
 		}
 		png = bytesToPNG(data); //Initializes png
+		this.password = password;
 	}
 	
 	/**
